@@ -1,0 +1,81 @@
+#!/bin/sh
+apt-get update
+apt-get install -y docker.io
+apt-get update && apt-get install -y apt-transport-https curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubelet kubeadm kubectl 
+
+next
+kubeadm init --apiserver-advertise-address=172.31.31.223 --pod-network-cidr=192.168.0.0/16
+
+kubeadm join 172.31.17.103:6443 --token 6u3qhg.2idfapapy9adqa0a \
+    --discovery-token-ca-cert-hash sha256:92191041a4d5cd5b76836a36b91498347870d523fe858c65578c0f2004585314
+next
+ mkdir -p $HOME/.kube
+ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+next
+kubectl get nodes
+show nodes
+next
+kubectl get pods --all-namespaces
+next
+search in google
+https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+next
+kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+next
+serach in google
+install kubernetees dashboard
+next
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+next
+kubectl get svc --all-namespaces
+next 
+kubectl proxy
+starting service 127.0.0.1:8001
+next
+curl 127.0.0.1:8001
+show all apis
+if  incase kubectl proxy not running enter fg then kill the service with command
+sudo netstat -tnlp | grep 8001 
+next enter kubectl proxy & bg
+then check fg
+next
+kubectl edit svc kubernetes-dashboard --namespaces=kube-system
+next
+change clusterport to NodePort
+next
+check kubectl get svc --all-namespaces
+pick kubeadm-dashboard external port like 32217
+next
+go to new mozila browser and enter public ip of kubeapiversion master
+https://52.17.20.12:32171 next accept the risks in mozilla
+next generate token
+goto this site
+https://www.edureka.co/blog/kubernetes-dashboard/
+enter 3 commands in master
+next one token display paste that token in browser
+next
+go to namespace section and click create section then next deploy app
+take service httpd service
+next go to service section edit ymil file replace type=loadbalencer to nodeport
+next service start running and check it browser
+http://52.100.12.23:newportnumber
+next go to kubeapiserver master check pods running or not
+kubectl get pods --all-namespaces
+next got inside pod
+sudo kubectl exec -it firstapp-77b456bbc7-hpn9m bash
+next cd htdocs
+enter ls index.html next install vim first apt-get update next apt-get install vim
+next edit index.html file it works on pod 1
+next edit same to next pod 
+
+
+
+                                                                                                               
